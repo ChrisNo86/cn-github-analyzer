@@ -83,15 +83,19 @@ async function analyzeProfile() {
         }
 
         const data =
-            await response.json();
+    await response.json();
 
-        document
-            .querySelector("#errorCard")
-            ?.classList.add(
-                "hidden"
-            );
+document
+    .querySelector("#errorCard")
+    ?.classList.add(
+        "hidden"
+    );
 
-        renderProfile(data);
+renderProfile(data);
+
+await loadRepositories(
+    username
+);
 
     } catch {
 
@@ -101,6 +105,7 @@ async function analyzeProfile() {
 }
 
 function renderProfile(data) {
+ 
 const statusBadge =
     document.querySelector(
         "#statusBadge"
@@ -205,6 +210,12 @@ function clearAnalyzer() {
     statsGrid.classList.add(
         "hidden"
     );
+    reposCard.classList.add(
+    "hidden"
+);
+
+reposContainer.innerHTML =
+    "";
 }
 
 function formatDate(date) {
@@ -266,4 +277,96 @@ async function copyProfileUrl() {
     await navigator.clipboard.writeText(
         url
     );
+}
+
+const reposCard =
+    document.querySelector(
+        "#reposCard"
+    );
+
+const reposContainer =
+    document.querySelector(
+        "#reposContainer"
+    );
+
+    async function loadRepositories(
+    username
+) {
+
+    const response =
+        await fetch(
+            `https://api.github.com/users/${username}/repos`
+        );
+
+    const repos =
+        await response.json();
+
+    const sortedRepos =
+        repos
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    b.stargazers_count -
+                    a.stargazers_count
+            )
+            .slice(0, 6);
+
+    renderRepositories(
+        sortedRepos
+    );
+}
+
+function renderRepositories(
+    repos
+) {
+
+    reposCard.classList.remove(
+        "hidden"
+    );
+
+    reposContainer.innerHTML =
+        repos.map(repo => `
+
+<div class="repo-card">
+
+    <h3>
+        ${repo.name}
+    </h3>
+
+    <p>
+        ${
+            repo.description ??
+            "No description"
+        }
+    </p>
+
+    <div class="repo-meta">
+
+        <span class="repo-badge">
+            ${repo.language ?? "Unknown"}
+        </span>
+
+        <span class="repo-badge">
+            ⭐ ${repo.stargazers_count}
+        </span>
+
+        <span class="repo-badge">
+            🍴 ${repo.forks_count}
+        </span>
+
+    </div>
+
+    <a
+        href="${repo.html_url}"
+        target="_blank"
+        class="repo-link"
+    >
+        Open Repository
+    </a>
+
+</div>
+
+`).join("");
 }

@@ -10,7 +10,7 @@
 
 A modern GitHub profile analysis tool built with pure HTML, CSS and JavaScript.
 
-Developed by **CN Interactive Systems**.
+Developed by **Christian Noack**.
 
 </div>
 

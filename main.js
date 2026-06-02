@@ -50,6 +50,21 @@ const featuredRepo =
         "#featuredRepo"
     );
 
+    const scoreCard =
+    document.querySelector(
+        "#scoreCard"
+    );
+
+const scoreValue =
+    document.querySelector(
+        "#scoreValue"
+    );
+
+const scoreFill =
+    document.querySelector(
+        "#scoreFill"
+    );
+
 initialize();
 
 function initialize() {
@@ -115,11 +130,15 @@ await loadRepositories(
     username
 );
 
-    } catch {
+    } catch (error) {
 
-        showError();
+    console.error(
+        "GitHub Analyzer Error:",
+        error
+    );
 
-    }
+    showError();
+}
 }
 
 function renderProfile(data) {
@@ -207,12 +226,15 @@ statusBadge.className =
         data.followers,
         data.following
     );
+    renderDeveloperScore(
+    data
+);
 }
 
 function loadExample() {
 
     usernameInput.value =
-        "torvalds";
+        "ChrisNo86";
 
     analyzeProfile();
 }
@@ -228,24 +250,80 @@ function clearAnalyzer() {
     statsGrid.classList.add(
         "hidden"
     );
-    reposCard.classList.add(
+
+    reposCard?.classList.add(
+        "hidden"
+    );
+
+    languagesCard?.classList.add(
+        "hidden"
+    );
+
+    featuredRepoCard?.classList.add(
+        "hidden"
+    );
+    scoreCard?.classList.add(
     "hidden"
 );
-languagesCard.classList.add(
-    "hidden"
+document.querySelector(
+    "#name"
+).textContent = "-";
+
+document.querySelector(
+    "#login"
+).textContent = "-";
+
+document.querySelector(
+    "#bio"
+).textContent = "-";
+
+document.querySelector(
+    "#location"
+).textContent = "-";
+
+document.querySelector(
+    "#avatar"
+).src = "";
+
+scoreValue &&
+(
+    scoreValue.textContent = "0"
 );
-featuredRepoCard.classList.add(
-    "hidden"
+
+scoreFill &&
+(
+    scoreFill.style.width = "0%"
 );
+document
+    .querySelector("#errorCard")
+    ?.classList.add(
+        "hidden"
+    );
 
-featuredRepo.innerHTML =
-    "";
+    resetStatistics();
+}
 
-languagesContainer.innerHTML =
-    "";
+function resetStatistics() {
 
-reposContainer.innerHTML =
-    "";
+    const ids = [
+
+        "repos",
+        "followers",
+        "following",
+        "created",
+        "accountAge",
+        "ratio",
+        "statusBadge"
+
+    ];
+
+    ids.forEach(id => {
+
+        document.querySelector(
+            `#${id}`
+        ).textContent = "-";
+
+    });
 }
 
 function formatDate(date) {
@@ -259,7 +337,7 @@ function showError() {
 
     document
         .querySelector("#errorCard")
-        .classList.remove(
+        ?.classList.remove(
             "hidden"
         );
 
@@ -283,6 +361,22 @@ function calculateAccountAge(date) {
         today.getFullYear() -
         created.getFullYear()
     } years`;
+}
+function calculateAccountYears(
+    date
+) {
+
+    const created =
+        new Date(date);
+
+    const today =
+        new Date();
+
+    return Math.max(
+        1,
+        today.getFullYear() -
+        created.getFullYear()
+    );
 }
 function calculateRatio(
     followers,
@@ -614,4 +708,49 @@ function renderFeaturedRepository(
 
 </div>
 `;
+}
+
+function renderDeveloperScore(
+    data
+) {
+
+    let score = 0;
+
+    score += Math.min(
+        data.public_repos,
+        40
+    );
+
+    score += Math.min(
+        data.followers,
+        30
+    );
+
+    score += Math.min(
+        calculateAccountYears(
+            data.created_at
+        ) * 5,
+        20
+    );
+
+    score += Math.min(
+        data.following,
+        10
+    );
+
+    score =
+        Math.min(
+            score,
+            100
+        );
+
+    scoreCard.classList.remove(
+        "hidden"
+    );
+
+    scoreValue.textContent =
+        score;
+
+    scoreFill.style.width =
+        `${score}%`;
 }

@@ -338,6 +338,42 @@ button:hover {
   font-weight: 600;
 }
 
+.score-wrapper {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+.score-value {
+  font-size: 4rem;
+
+  font-weight: 800;
+
+  color: var(--accent);
+}
+
+.score-bar {
+  height: 14px;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.score-fill {
+  height: 100%;
+
+  width: 0;
+
+  transition: 0.5s ease;
+
+  background: linear-gradient(90deg, #00d4ff, #00ff9d);
+}
+
 @media (min-width: 768px) {
   .stats-grid {
     grid-template-columns: repeat(4, 1fr);

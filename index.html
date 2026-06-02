@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CN GitHub Profile Analyzer</title>
+
+    <link rel="stylesheet" href="/style.css" />
+
+    
+  </head>
+
+  <body>
+    <header class="hero">
+      <div class="container">
+        <span class="brand-badge">
+          <img
+            src="assets/logo.png"
+            alt="CN Interactive Systems"
+            class="brand-logo"
+          />
+
+          CN Interactive Systems
+        </span>
+
+        <h1>GitHub Profile Analyzer</h1>
+
+        <p>Analyze GitHub profiles instantly.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>GitHub Username</h2>
+
+        <input
+          id="usernameInput"
+          type="text"
+          placeholder="Enter GitHub username..."
+        />
+
+        <div class="action-bar">
+          <button id="analyzeBtn">Analyze</button>
+
+          <button id="exampleBtn">Load Example</button>
+
+          <button id="clearBtn">Clear</button>
+        </div>
+      </section>
+      <section id="errorCard" class="card error-card hidden">
+        <h3>User not found</h3>
+
+        <p>Please check the username.</p>
+      </section>
+      <section id="profileCard" class="card hidden">
+        <div class="profile-layout">
+          <img id="avatar" class="avatar" alt="GitHub Avatar" />
+
+          <div class="profile-info">
+            <h2 id="name">-</h2>
+
+            <p id="login">-</p>
+
+            <p id="bio">-</p>
+
+            <p id="location">-</p>
+            <button id="copyProfileBtn">
+    Copy Profile URL
+</button>
+
+            <a id="profileLink" target="_blank"> Open GitHub Profile </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="statsGrid" class="stats-grid hidden">
+        <article class="card">
+          <h3>Repositories</h3>
+
+          <p id="repos">-</p>
+        </article>
+
+        <article class="card">
+          <h3>Followers</h3>
+
+          <p id="followers">-</p>
+        </article>
+
+        <article class="card">
+          <h3>Following</h3>
+
+          <p id="following">-</p>
+        </article>
+
+        <article class="card">
+          <h3>Created</h3>
+
+          <p id="created">-</p>
+
+          <article class="card">
+            <h3>Account Age</h3>
+
+            <p id="accountAge">-</p>
+          </article>
+        <article class="card">
+
+    <h3>Follower Ratio</h3>
+
+    <p id="ratio">
+        -
+    </p>
+
+</article>
+<article class="card">
+
+    <h3>Status</h3>
+
+    <p id="statusBadge">
+        -
+    </p>
+
+</article>
+      </section>
+      <section class="card">
+
+    <h2>About</h2>
+
+    <div class="details-grid">
+
+        <div class="details-item">
+
+            <span>Version</span>
+
+            <strong>1.1.0</strong>
+
+        </div>
+
+        <div class="details-item">
+
+            <span>Developer</span>
+
+            <strong>
+                CN Interactive Systems
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>© 2026 CN Interactive Systems. All rights reserved.</p>
+      </div>
+    </footer>
+    <script defer src="/main.js"></script>
+  </body>
+</html>

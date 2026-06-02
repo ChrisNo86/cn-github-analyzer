@@ -31,6 +31,24 @@ const statsGrid =
     document.querySelector(
         "#copyProfileBtn"
     );
+    const languagesCard =
+    document.querySelector(
+        "#languagesCard"
+    );
+
+const languagesContainer =
+    document.querySelector(
+        "#languagesContainer"
+    );
+    const featuredRepoCard =
+    document.querySelector(
+        "#featuredRepoCard"
+    );
+
+const featuredRepo =
+    document.querySelector(
+        "#featuredRepo"
+    );
 
 initialize();
 
@@ -213,6 +231,18 @@ function clearAnalyzer() {
     reposCard.classList.add(
     "hidden"
 );
+languagesCard.classList.add(
+    "hidden"
+);
+featuredRepoCard.classList.add(
+    "hidden"
+);
+
+featuredRepo.innerHTML =
+    "";
+
+languagesContainer.innerHTML =
+    "";
 
 reposContainer.innerHTML =
     "";
@@ -316,6 +346,12 @@ const reposContainer =
     renderRepositories(
         sortedRepos
     );
+    renderLanguages(
+    repos
+);
+renderFeaturedRepository(
+    repos
+);
 }
 
 function renderRepositories(
@@ -369,4 +405,213 @@ function renderRepositories(
 </div>
 
 `).join("");
+}
+
+function renderLanguages(
+    repos
+) {
+
+    const languages = {};
+
+    repos.forEach(repo => {
+
+        const language =
+            repo.language;
+
+        if (!language) {
+            return;
+        }
+
+        languages[language] =
+            (languages[language] || 0) + 1;
+    });
+
+    const total =
+        Object.values(
+            languages
+        ).reduce(
+            (
+                sum,
+                value
+            ) => sum + value,
+            0
+        );
+
+    languagesCard.classList.remove(
+        "hidden"
+    );
+
+    languagesContainer.innerHTML =
+        Object.entries(
+            languages
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                b[1] - a[1]
+        )
+        .map(
+            (
+                [language, count]
+            ) => {
+
+                const percent =
+                    Math.round(
+                        count /
+                        total *
+                        100
+                    );
+
+                return `
+<div class="language-row">
+
+    <div class="language-header">
+
+        <span>
+            ${language}
+        </span>
+
+        <span>
+            ${percent}%
+        </span>
+
+    </div>
+
+    <div class="language-bar">
+
+        <div
+            class="language-fill"
+            style="
+                width:${percent}%;
+                background:${getLanguageColor(language)}
+            "
+        ></div>
+
+    </div>
+
+</div>
+`;
+            }
+        )
+        .join("");
+}
+
+function getLanguageColor(
+    language
+) {
+
+    const colors = {
+
+        JavaScript:
+            "#f7df1e",
+
+        TypeScript:
+            "#3178c6",
+
+        HTML:
+            "#e34f26",
+
+        CSS:
+            "#1572b6",
+
+        Python:
+            "#3776ab",
+
+        "C#":
+            "#68217a",
+
+        Java:
+            "#f89820",
+
+        PHP:
+            "#777bb4",
+
+        C:
+            "#a8b9cc",
+
+        "C++":
+            "#00599c"
+    };
+
+    return (
+        colors[language] ??
+        "#00d4ff"
+    );
+}
+
+function renderFeaturedRepository(
+    repos
+) {
+
+    if (!repos.length) {
+        return;
+    }
+
+    const mostStarred =
+        repos.reduce(
+            (
+                best,
+                current
+            ) => {
+
+                return current
+                    .stargazers_count >
+                    best
+                        .stargazers_count
+                    ? current
+                    : best;
+
+            }
+        );
+
+    featuredRepoCard
+        .classList.remove(
+            "hidden"
+        );
+
+    featuredRepo.innerHTML = `
+<div class="featured-repo">
+
+    <h3>
+        ${mostStarred.name}
+    </h3>
+
+    <p>
+        ${
+            mostStarred.description ??
+            "No description"
+        }
+    </p>
+
+    <div class="featured-stats">
+
+        <span class="featured-badge">
+            ⭐ ${mostStarred.stargazers_count}
+        </span>
+
+        <span class="featured-badge">
+            🍴 ${mostStarred.forks_count}
+        </span>
+
+        <span class="featured-badge">
+            ${
+                mostStarred.language ??
+                "Unknown"
+            }
+        </span>
+
+    </div>
+
+    <a
+        href="${mostStarred.html_url}"
+        target="_blank"
+        class="featured-link"
+    >
+        Open Repository
+    </a>
+
+</div>
+`;
 }
